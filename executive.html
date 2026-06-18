@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แดชบอร์ดผู้บริหาร - โครงการพัฒนาศักยภาพผู้บริหาร</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; font-family: 'Sarabun', sans-serif; color: #333; }
+    .card { border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.05); border: none; }
+    .header-executive { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; border-radius: 12px 12px 0 0; }
+    .btn-executive { background: linear-gradient(135deg, #203a43, #2c5364); color: white; border: none; font-weight: bold; }
+    .btn-executive:hover { background: #0f2027; color: white; }
+    .summary-box { background: white; border-left: 5px solid #2c5364; border-radius: 8px; transition: transform 0.2s; }
+    .summary-box:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .table-responsive { max-height: 60vh; overflow-y: auto; }
+    .table-dark-custom { background-color: #203a43; color: white; }
+    #dashboardArea { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="container mt-5" id="loginArea">
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-5 text-center">
+        <div class="card overflow-hidden">
+          <div class="header-executive py-4">
+            <h4 class="mb-0 fw-bold">📊 สำหรับผู้บริหาร</h4>
+          </div>
+          <div class="card-body p-4 p-md-5 bg-white">
+            <p class="text-muted mb-4">กรุณาใส่รหัสผ่านเพื่อเข้าดูสรุปข้อมูลผู้สมัคร</p>
+            <input type="password" class="form-control form-control-lg mb-4 text-center letter-spacing-1" id="execPin" placeholder="รหัส PIN (888888)">
+            <button class="btn btn-executive btn-lg w-100 py-2" onclick="checkPin()">เข้าสู่ระบบแดชบอร์ด</button>
+            <div id="loginAlert" class="mt-3 text-danger fw-bold"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid mt-4 mb-5" id="dashboardArea">
+    
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+      <h3 class="mb-0 fw-bold text-dark">📈 รายงานสรุปยอดผู้สมัคร (Executive View)</h3>
+      <button class="btn btn-outline-secondary shadow-sm fw-bold px-4 rounded-pill mt-3 mt-md-0" onclick="fetchData()">🔄 รีเฟรชข้อมูล</button>
+    </div>
+
+    <div class="card mb-4 bg-light border-0">
+      <div class="card-body p-4">
+        <h5 class="fw-bold mb-3 border-bottom pb-2" style="color: #2c5364;">📍 สรุปจำนวนผู้สมัครแบ่งตามเครือข่าย</h5>
+        <div id="networkSummary" class="row g-3">
+          <div class="col-12 text-center text-muted py-3"><span class="spinner-border spinner-border-sm me-2"></span>กำลังประมวลผล...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header bg-white pt-4 pb-2 px-4 d-flex justify-content-between align-items-center border-0">
+        <h5 class="fw-bold text-secondary mb-0">📋 รายชื่อผู้สมัครทั้งหมด</h5>
+        <span class="badge bg-dark rounded-pill fs-6 px-3" id="totalCount">กำลังโหลด...</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped mb-0 align-middle">
+            <thead class="sticky-top">
+              <tr>
+                <th class="table-dark-custom py-3 px-3">เครือข่าย</th>
+                <th class="table-dark-custom py-3">คำนำหน้า</th>
+                <th class="table-dark-custom py-3">ชื่อ-สกุล</th>
+                <th class="table-dark-custom py-3">ตำแหน่ง</th>
+                <th class="table-dark-custom py-3">สังกัด</th>
+                <th class="table-dark-custom py-3 text-center">เบอร์โทร</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr><td colspan="6" class="text-center py-5 text-muted"><span class="spinner-border spinner-border-sm me-2"></span>กำลังดึงข้อมูล...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-muted mt-4" style="font-size: 0.9rem; opacity: 0.7;">
+      ออกแบบระบบโดย นายนคร เจือจันทร์ นิติกร @2026
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // ⚠️ นำ URL ของ Apps Script ที่ได้จากหลังบ้านมาวางที่นี่
+    const SCRIPT_URL = "ใส่_URL_WEB_APP_ของคุณที่นี่";
+
+    function checkPin() {
+      var pin = document.getElementById('execPin').value;
+      if (pin === "888888") { // ตั้งรหัสผ่านสำหรับผู้บริหารตรงนี้ (เปลี่ยนได้)
+        document.getElementById('loginArea').style.display = 'none';
+        document.getElementById('dashboardArea').style.display = 'block';
+        fetchData();
+      } else {
+        document.getElementById('loginAlert').innerText = "❌ รหัสผ่านไม่ถูกต้อง!";
+      }
+    }
+
+    function fetchData() {
+      document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted"><span class="spinner-border spinner-border-sm me-2"></span>กำลังดึงข้อมูล...</td></tr>';
+      
+      fetch(SCRIPT_URL + "?action=getExecutiveData")
+        .then(response => response.json())
+        .then(result => {
+          if(result.success) {
+            renderDashboard(result.data);
+          } else {
+            alert("เกิดข้อผิดพลาดในการดึงข้อมูล");
+          }
+        })
+        .catch(error => {
+          document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" class="text-center py-5 text-danger">เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย</td></tr>';
+        });
+    }
+
+    function renderDashboard(dataArray) {
+      // 1. สร้างตารางและนับเครือข่าย
+      var tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+      
+      var networkCounts = {};
+      var totalUsers = 0;
+
+      if(dataArray.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted">ยังไม่มีข้อมูลผู้สมัคร</td></tr>';
+        document.getElementById('networkSummary').innerHTML = '<div class="col-12 text-center">ไม่มีข้อมูล</div>';
+        document.getElementById('totalCount').innerText = "รวม 0 คน";
+        return;
+      }
+
+      dataArray.forEach(function(row) {
+        var net = row.network || "ไม่ระบุเครือข่าย";
+        
+        // นับยอดเครือข่าย
+        if(networkCounts[net]) {
+          networkCounts[net]++;
+        } else {
+          networkCounts[net] = 1;
+        }
+        totalUsers++;
+
+        // สร้างแถวตาราง (ไม่มีปุ่มแก้ไข ไม่มีเลข ปปช.)
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td class="fw-bold px-3 text-secondary">' + net + '</td>' +
+                       '<td>' + row.prefix + '</td>' + 
+                       '<td class="fw-bold">' + row.name + '</td>' + 
+                       '<td>' + row.position + '</td>' + 
+                       '<td><small>' + row.organization + '</small></td>' + 
+                       '<td class="text-center"><a href="tel:' + row.phone + '" class="text-decoration-none fw-bold">' + row.phone + '</a></td>';
+        tbody.appendChild(tr);
+      });
+
+      // 2. สร้างการ์ดสรุปเครือข่าย
+      var summaryDiv = document.getElementById('networkSummary');
+      summaryDiv.innerHTML = '';
+      
+      // เรียงลำดับชื่อเครือข่าย ก-ฮ
+      var sortedNetworks = Object.keys(networkCounts).sort();
+      
+      sortedNetworks.forEach(function(netName) {
+        var count = networkCounts[netName];
+        var html = '<div class="col-md-3 col-6">' +
+                   '  <div class="summary-box p-3 shadow-sm h-100 d-flex justify-content-between align-items-center">' +
+                   '    <span class="fw-bold" style="font-size: 0.9rem;">' + netName + '</span>' +
+                   '    <span class="badge bg-primary fs-6 rounded-pill">' + count + '</span>' +
+                   '  </div>' +
+                   '</div>';
+        summaryDiv.innerHTML += html;
+      });
+
+      document.getElementById('totalCount').innerText = "รวมทั้งหมด " + totalUsers + " คน";
+    }
+  </script>
+</body>
+</html>
