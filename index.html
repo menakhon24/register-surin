@@ -21,11 +21,9 @@
     }
     .container { max-width: 850px; margin-top: 40px; }
     
-    /* คลาสสีตัวอักษรใหม่ */
     .text-navy { color: var(--navy-dark) !important; }
     .text-gold { color: var(--gold-primary) !important; }
 
-    /* ตกแต่งกล่องหลัก */
     .card {
       border-radius: 15px;
       box-shadow: 0 10px 30px rgba(11, 36, 71, 0.08) !important;
@@ -33,7 +31,6 @@
       background: #ffffff;
     }
     
-    /* ตกแต่งส่วนหัว (Header) */
     .header-bg { 
       background-color: var(--navy-dark); 
       color: white; 
@@ -44,7 +41,6 @@
     .header-bg h3 { color: var(--gold-primary); font-weight: 700; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
     .header-bg p { font-weight: 300; letter-spacing: 0.5px; opacity: 0.9; }
 
-    /* ตกแต่งปุ่มกดหลัก (สีทองพรีเมียม) */
     .btn-primary {
       background: var(--gold-gradient);
       color: white;
@@ -62,21 +58,17 @@
       box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
     }
 
-    /* ตกแต่งช่องกรอกข้อมูล */
-    .form-control, .form-select {
+    .form-control {
       border-radius: 8px;
       padding: 10px 15px;
       border: 1px solid #ced4da;
       transition: all 0.3s;
     }
-    /* เมื่อคลิกช่องกรอกข้อมูลให้เป็นขอบสีทอง */
-    .form-control:focus, .form-select:focus {
+    .form-control:focus {
       border-color: var(--gold-primary);
       box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
     }
-    .form-label { font-weight: 600; color: var(--navy-dark); margin-bottom: 0.4rem; }
 
-    /* ตกแต่งแท็บเมนู (Tabs) */
     .nav-tabs { border-bottom: 2px solid #e9ecef; }
     .nav-tabs .nav-link { 
       color: #6c757d; 
@@ -94,7 +86,6 @@
       border-bottom: 3px solid var(--gold-primary); 
     }
 
-    /* กล่องข้อมูลติดต่อ (Hover Effect ลอยขึ้นพร้อมเงาสีทอง) */
     .contact-box {
       background-color: #ffffff;
       border-left: 5px solid var(--gold-primary) !important;
@@ -105,11 +96,6 @@
       box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2) !important;
     }
 
-    /* เพิ่มการขยับเล็กน้อยให้รูปภาพตัวอย่างเสื้อ */
-    #selectedShirtImage { transition: transform 0.3s; border-color: var(--gold-primary) !important; }
-    #selectedShirtImage:hover { transform: scale(1.02); }
-
-    /* ตกแต่งข้อความผู้ออกแบบระบบที่ด้านล่างสุด */
     .footer-credit {
       text-align: center;
       color: #6c757d;
@@ -118,13 +104,16 @@
       letter-spacing: 0.5px;
       opacity: 0.8;
     }
+    
+    /* อนิเมชันไอคอนปิดระบบ */
+    .closed-icon { font-size: 5rem; text-shadow: 0 10px 20px rgba(0,0,0,0.1); }
   </style>
 </head>
 <body>
   <div class="container mb-5">
     <div class="header-bg text-center shadow-sm">
-      <h3 class="mb-2">แบบฟอร์มการสมัครเข้าร่วมโครงการพัฒนาศักยภาพผู้บริหาร</h3>
-      <p class="mb-0">สพป.สุรินทร์ เขต 3 (12-14 กรกฎาคม 2569 ณ จ.เพชรบูรณ์)</p>
+      <h3 class="mb-2">สมัครโครงการพัฒนาศักยภาพผู้บริหาร</h3>
+      <p class="mb-0">สังกัด สพป.สุรินทร์ เขต 3 (12-14 กรกฎาคม 2569 ณ จ.เพชรบูรณ์)</p>
     </div>
     
     <div class="card">
@@ -132,7 +121,7 @@
         
         <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#register" type="button">📝 ฟอร์มสมัคร</button>
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#register" type="button">📝 แจ้งเตือนสถานะระบบ</button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#check" type="button">🔍 ตรวจสอบสถานะการสมัคร</button>
@@ -141,145 +130,23 @@
 
         <div class="tab-content" id="myTabContent">
           
+          <!-- ✅ หน้าจอแจ้งปิดรับสมัคร (ลบฟอร์มออกแล้ว) -->
           <div class="tab-pane fade show active" id="register">
-            <form id="regForm" onsubmit="handleFormSubmit(event)">
-              <div class="row g-4">
-                
-                <div class="col-md-3">
-                  <label class="form-label">1. คำนำหน้า</label>
-                  <select class="form-select" id="prefixSelect" onchange="togglePrefixInput()" required>
-                    <option value="">เลือก...</option>
-                    <option value="นาย">นาย</option>
-                    <option value="นาง">นาง</option>
-                    <option value="นางสาว">นางสาว</option>
-                    <option value="อื่นๆ">อื่นๆ (โปรดระบุ)</option>
-                  </select>
-                  <input type="text" class="form-control mt-2" id="prefixOther" placeholder="ระบุคำนำหน้า..." style="display: none;">
-                </div>
-                <div class="col-md-9">
-                  <label class="form-label">2. ชื่อ-สกุล</label>
-                  <input type="text" class="form-control" id="fullName" required>
-                </div>
-                
-                <div class="col-md-6">
-                  <label class="form-label">3. เลขที่บัตร ปปช. (13 หลัก)</label>
-                  <input type="text" class="form-control" id="citizenId" pattern="\d{13}" maxlength="13" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" placeholder="เลข 13 หลัก" required>
-                </div>
-                
-                <div class="col-md-6">
-                  <label class="form-label">4. ตำแหน่ง</label>
-                  <select class="form-select" id="positionSelect" onchange="togglePositionInput()" required>
-                    <option value="">เลือก...</option>
-                    <option value="ผู้อำนวยการโรงเรียน">ผู้อำนวยการโรงเรียน</option>
-                    <option value="รองผู้อำนวยการโรงเรียน">รองผู้อำนวยการโรงเรียน</option>
-                    <option value="อื่นๆ">อื่นๆ (โปรดระบุ)</option>
-                  </select>
-                  <input type="text" class="form-control mt-2" id="positionOther" placeholder="ระบุตำแหน่งของคุณ..." style="display: none;">
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">5. เบอร์มือถือ</label>
-                  <input type="text" class="form-control" id="phone" pattern="\d{9,10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" placeholder="08XXXXXXXX" required>
-                </div>
-                
-                <div class="col-md-6">
-                  <label class="form-label">6. สังกัด (โรงเรียน หรือ สพท.)</label>
-                  <input type="text" class="form-control" id="organization" placeholder="โรงเรียนสุวรรณคารสงเคราะห์" required>
-                </div>
-
-                <div class="col-md-12">
-                  <label class="form-label">7. เครือข่ายการจัดการศึกษา</label>
-                  <select class="form-select" id="network" required>
-                    <option value="">เลือกเครือข่ายการจัดการศึกษา...</option>
-                    <option value="สำนักงานเขต">สำนักงานเขต</option>
-                    <option value="เครือข่ายปราสาท 1">เครือข่ายปราสาท 1</option>
-                    <option value="เครือข่ายปราสาท 2">เครือข่ายปราสาท 2</option>
-                    <option value="เครือข่ายปราสาท 3">เครือข่ายปราสาท 3</option>
-                    <option value="เครือข่ายปราสาท 4">เครือข่ายปราสาท 4</option>
-                    <option value="เครือข่ายปราสาท 5">เครือข่ายปราสาท 5</option>
-                    <option value="เครือข่ายปราสาท 6">เครือข่ายปราสาท 6</option>
-                    <option value="เครือข่ายปราสาท 7">เครือข่ายปราสาท 7</option>
-                    <option value="เครือข่ายปราสาท 8">เครือข่ายปราสาท 8</option>
-                    <option value="เครือข่ายสังขะ 1">เครือข่ายสังขะ 1</option>
-                    <option value="เครือข่ายสังขะ 2">เครือข่ายสังขะ 2</option>
-                    <option value="เครือข่ายสังขะ 3">เครือข่ายสังขะ 3</option>
-                    <option value="เครือข่ายสังขะ 4">เครือข่ายสังขะ 4</option>
-                    <option value="เครือข่ายสังขะ 5">เครือข่ายสังขะ 5</option>
-                    <option value="เครือข่ายสังขะ 6">เครือข่ายสังขะ 6</option>
-                    <option value="เครือข่ายกาบเชิง 1">เครือข่ายกาบเชิง 1</option>
-                    <option value="เครือข่ายกาบเชิง 2">เครือข่ายกาบเชิง 2</option>
-                    <option value="เครือข่ายกาบเชิง 3">เครือข่ายกาบเชิง 3</option>
-                    <option value="เครือข่ายบัวเชด 1">เครือข่ายบัวเชด 1</option>
-                    <option value="เครือข่ายบัวเชด 2">เครือข่ายบัวเชด 2</option>
-                    <option value="เครือข่ายพนมดงรัก 1">เครือข่ายพนมดงรัก 1</option>
-                    <option value="เครือข่ายพนมดงรัก 2">เครือข่ายพนมดงรัก 2</option>
-                    <option value="เครือข่ายศรีณรงค์ 1">เครือข่ายศรีณรงค์ 1</option>
-                    <option value="เครือข่ายศรีณรงค์ 2">เครือข่ายศรีณรงค์ 2</option>
-                    <option value="เครือข่ายศรีณรงค์ 3">เครือข่ายศรีณรงค์ 3</option>
-                  </select>
-                </div>
-
-                <div class="col-md-12">
-                  <label class="form-label">8. ที่อยู่โรงเรียน</label>
-                  <div class="row g-2">
-                    <div class="col-md-4">
-                      <input type="text" class="form-control" id="houseNo" placeholder="เลขที่/หมู่" required>
-                    </div>
-                    <div class="col-md-4">
-                      <input type="text" class="form-control" id="subDistrict" placeholder="ตำบล" required>
-                    </div>
-                    <div class="col-md-4">
-                      <input type="text" class="form-control" id="district" placeholder="อำเภอ" required>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <label class="form-label">9. เลขที่ผู้เสียภาษี (โรงเรียน 13 หลัก)</label>
-                  <input type="text" class="form-control" id="taxId" pattern="\d{13}" maxlength="13" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" placeholder="เลข 13 หลัก" required>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label">10. ไซส์เสื้อ 
-                    <a href="#" class="text-gold ms-1 text-decoration-none" data-bs-toggle="modal" data-bs-target="#sizeModal"><small>(คลิกดูขนาดเสื้อ)</small></a>
-                  </label>
-                  <select class="form-select" id="shirtSize" required>
-                    <option value="">เลือกไซส์...</option>
-                    <option value="SSS">SSS</option>
-                    <option value="SS">SS</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                    <option value="2XL">2XL</option>
-                    <option value="3XL">3XL</option>
-                    <option value="4XL">4XL</option>
-                    <option value="5XL">5XL</option>
-                  </select>
-                </div>
-                
-                <div class="col-md-6">
-                  <label class="form-label">11. คำบนเสื้อ</label>
-                  <select class="form-select" id="shirtWord" required onchange="showShirtImage()">
-                    <option value="">เลือกคำ...</option>
-                    <option value="มิตรภาพ">มิตรภาพ</option>
-                    <option value="สัมพันธภาพ">สัมพันธภาพ</option>
-                    <option value="ภราดรภาพ">ภราดรภาพ</option>
-                  </select>
-                  
-                  <div id="dynamicShirtPreview" class="mt-3 text-center" style="display: none;">
-                    <img id="selectedShirtImage" src="" alt="ตัวอย่างเสื้อ" class="img-fluid rounded shadow border border-2" style="max-height: 250px;">
-                    <p class="text-navy small mt-2 fw-bold" id="shirtImageCaption"></p>
-                  </div>
-                </div>
-              </div>
+            <div class="text-center py-5">
+              <div class="closed-icon mb-3">🔒</div>
+              <h2 class="fw-bold text-navy mb-3">ปิดรับสมัครเรียบร้อยแล้ว</h2>
+              <p class="text-muted fs-5 mb-0">ขอบคุณทุกท่านที่ให้ความสนใจเข้าร่วมโครงการ<br>ขณะนี้ระบบได้ปิดรับการลงทะเบียนแล้วครับ</p>
               
-              <hr class="my-5 opacity-25">
-              <button type="submit" class="btn btn-primary w-100 py-3 fs-5" id="btnSubmit">บันทึกข้อมูลการสมัคร</button>
-              <div id="regAlert" class="mt-4 text-center"></div>
-            </form>
+              <hr class="w-50 mx-auto my-4" style="border-color: var(--gold-primary); opacity: 0.5; border-width: 2px;">
+              
+              <div class="p-3 bg-light rounded-3 d-inline-block border shadow-sm">
+                <span class="fs-4 me-2">💡</span>
+                <span class="text-navy fw-bold fs-6">ท่านยังสามารถตรวจสอบข้อมูลของตนเองได้ที่เมนู <strong>"ตรวจสอบสถานะการสมัคร"</strong></span>
+              </div>
+            </div>
           </div>
 
+          <!-- หน้าจอตรวจสอบสถานะการสมัคร (ยังคงใช้งานได้ตามปกติ) -->
           <div class="tab-pane fade" id="check">
             <div class="row justify-content-center mt-4 mb-5">
               <div class="col-md-8 text-center">
@@ -317,127 +184,12 @@
     </div>
   </div>
 
-  <div class="modal fade" id="sizeModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content border-0 shadow-lg">
-        <div class="modal-header border-0" style="background-color: var(--navy-dark);">
-          <h5 class="modal-title fw-bold text-gold">ตารางขนาดเสื้อ</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body text-center p-4 bg-light">
-          <img src="https://i.ibb.co/JwMqGMsb/26e4797f-8492-4429-92b2-785aca05d714.jpg" alt="ตารางขนาดเสื้อ" class="img-fluid rounded shadow-sm">
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // ⚠️ นำ URL ของ Apps Script ที่ได้มาวางในเครื่องหมายคำพูดด้านล่างนี้ (ต้องลงท้ายด้วย /exec)
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtsQn2lbq2PxwuUs2QBLc9mcJXuFhc-wYSfbINyQGm54dUDBNbs6_i7JOlvXMEHe0c/exec";
 
-    function togglePrefixInput() {
-      var select = document.getElementById("prefixSelect");
-      var otherInput = document.getElementById("prefixOther");
-      if (select.value === "อื่นๆ") {
-        otherInput.style.display = "block";
-        otherInput.setAttribute("required", "true");
-      } else {
-        otherInput.style.display = "none";
-        otherInput.removeAttribute("required");
-      }
-    }
-
-    function togglePositionInput() {
-      var select = document.getElementById("positionSelect");
-      var otherInput = document.getElementById("positionOther");
-      if (select.value === "อื่นๆ") {
-        otherInput.style.display = "block";
-        otherInput.setAttribute("required", "true");
-      } else {
-        otherInput.style.display = "none";
-        otherInput.removeAttribute("required");
-      }
-    }
-
-    function showShirtImage() {
-      var selectedWord = document.getElementById("shirtWord").value;
-      var previewDiv = document.getElementById("dynamicShirtPreview");
-      var imgElement = document.getElementById("selectedShirtImage");
-      var captionElement = document.getElementById("shirtImageCaption");
-      
-      var imgUrls = {
-        "มิตรภาพ": "https://i.ibb.co/237K5Y3t/1.png",
-        "สัมพันธภาพ": "https://i.ibb.co/nMdnrD9y/2.png",
-        "ภราดรภาพ": "https://i.ibb.co/v4XtDFzf/3.png"
-      };
-      
-      if (selectedWord !== "" && imgUrls[selectedWord]) {
-        imgElement.src = imgUrls[selectedWord]; 
-        captionElement.innerText = "เสื้อคำว่า: " + selectedWord; 
-        previewDiv.style.display = "block"; 
-      } else {
-        previewDiv.style.display = "none"; 
-      }
-    }
-
-    function handleFormSubmit(event) {
-      event.preventDefault();
-      var btn = document.getElementById('btnSubmit');
-      var alertBox = document.getElementById('regAlert');
-      
-      btn.disabled = true;
-      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังบันทึกข้อมูลการสมัคร...';
-
-      var finalPrefix = document.getElementById('prefixSelect').value;
-      if (finalPrefix === "อื่นๆ") finalPrefix = document.getElementById('prefixOther').value;
-      
-      var finalPosition = document.getElementById('positionSelect').value;
-      if (finalPosition === "อื่นๆ") finalPosition = document.getElementById('positionOther').value;
-
-      var fullAdd = document.getElementById('houseNo').value + ' ต.' + document.getElementById('subDistrict').value + ' อ.' + document.getElementById('district').value;
-
-      var dataObj = {
-        prefix: finalPrefix,
-        fullName: document.getElementById('fullName').value,
-        citizenId: document.getElementById('citizenId').value,
-        position: finalPosition,
-        phone: document.getElementById('phone').value,
-        organization: document.getElementById('organization').value,
-        network: document.getElementById('network').value,
-        fullAddress: fullAdd,
-        taxId: document.getElementById('taxId').value,
-        shirtSize: document.getElementById('shirtSize').value,
-        shirtWord: document.getElementById('shirtWord').value
-      };
-
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(dataObj)
-      })
-      .then(response => response.json())
-      .then(data => {
-        btn.disabled = false;
-        btn.innerHTML = 'บันทึกข้อมูลการสมัคร';
-        if(data.success) {
-          alertBox.innerHTML = '<div class="alert alert-success fs-5 fw-bold shadow-sm py-3" style="color: #0B2447; border-left: 5px solid #D4AF37;">✅ บันทึกข้อมูลการสมัครสำเร็จ โปรดตรวจสอบสถานะ</div>';
-          document.getElementById('regForm').reset();
-          togglePrefixInput(); 
-          togglePositionInput(); 
-          document.getElementById("dynamicShirtPreview").style.display = "none"; 
-        } else {
-          alertBox.innerHTML = '<div class="alert alert-danger shadow-sm fw-bold">❌ ' + data.message + '</div>';
-        }
-      })
-      .catch(error => {
-        btn.disabled = false;
-        btn.innerHTML = 'บันทึกข้อมูลการสมัคร';
-        alertBox.innerHTML = '<div class="alert alert-danger shadow-sm">❌ ระบบเครือข่ายมีปัญหา กรุณาลองใหม่อีกครั้ง</div>';
-        console.error("Error:", error);
-      });
-    }
-
+    // ฟังก์ชันค้นหาข้อมูล (ยังคงเก็บไว้เพื่อให้เมนูตรวจสอบสถานะทำงานได้)
     function checkData() {
       var cid = document.getElementById('searchId').value;
       var btn = document.getElementById('btnSearch');
